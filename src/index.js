@@ -11,6 +11,6 @@ require('./socket')(io)
 app.set('port', 3000)
 app.use(express.static(path.join(__dirname, 'public')))
 
-app.listen(app.get('port'), () => {
+server.listen(app.get('port'), () => {
     console.log('Aplicacion esta corriendo en el puerto ' + app.get('port'))
 })
