@@ -3,7 +3,7 @@ var click = false
 var moving_mouse = false
 var x_position = 0
 var y_position = 0
-var previous_position = {x_position:0, y_position:0}
+var previous_position = null
 var color = 'black'
 
 const canvas = document.getElementById('canvas')
@@ -28,3 +28,29 @@ canvas.addEventListener('mousemove', (e) => {
     y_position = e.clientY
     moving_mouse = true
 })
+
+function create_drawing(){
+    if(click && moving_mouse && previous_position != null){
+        let drawing = {
+            x_position: x_position,
+            y_position: y_position,
+            color: color,
+            previous_position: previous_position
+        }
+        socket.emit('drawing', drawing)
+    }
+    previous_position = {x_position: x_position, y_position: y_position}
+    setTimeout(create_drawing, 25)
+}
+
+socket.on('show_drawing', (drawing) => {
+    context.beginPath()
+    context.lineWidth = 3
+    context.strokeStyle = drawing.color
+    context.moveTo(drawing.x_position, drawing.y_position)
+    context.lineTo(drawing.previous_position.x_position, drawing.previous_position.y_position)
+    context.stroke()
+})
+
+
+create_drawing()
