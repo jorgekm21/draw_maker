@@ -29,6 +29,16 @@ canvas.addEventListener('mousemove', (e) => {
     moving_mouse = true
 })
 
+function change_color(c){
+    color = c
+    context.strokeStyle = color
+    context.stroke()
+}
+
+function delete_all(){
+    socket.emit('delete')
+}
+
 function create_drawing(){
     if(click && moving_mouse && previous_position != null){
         let drawing = {
@@ -44,12 +54,16 @@ function create_drawing(){
 }
 
 socket.on('show_drawing', (drawing) => {
-    context.beginPath()
-    context.lineWidth = 3
-    context.strokeStyle = drawing.color
-    context.moveTo(drawing.x_position, drawing.y_position)
-    context.lineTo(drawing.previous_position.x_position, drawing.previous_position.y_position)
-    context.stroke()
+    if(drawing != null){
+        context.beginPath()
+        context.lineWidth = 3
+        context.strokeStyle = drawing.color
+        context.moveTo(drawing.x_position, drawing.y_position)
+        context.lineTo(drawing.previous_position.x_position, drawing.previous_position.y_position)
+        context.stroke()
+    } else {
+        context.clearRect(0, 0, canvas.width, canvas.height)
+    }
 })
 
 
