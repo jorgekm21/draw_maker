@@ -6,6 +6,7 @@ var y_position = 0
 var previous_position = null
 var color = 'black'
 
+const users = document.getElementById('users')
 const canvas = document.getElementById('canvas')
 const context = canvas.getContext('2d')
 
@@ -64,6 +65,10 @@ socket.on('show_drawing', (drawing) => {
     } else {
         context.clearRect(0, 0, canvas.width, canvas.height)
     }
+})
+
+socket.on('users', (number) => {
+    users.innerHTML = `Numero de usuarios conectados: ${number}`
 })
 
 
